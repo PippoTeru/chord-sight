@@ -1,0 +1,39 @@
+# Dependencies
+node_modules
+
+# Build outputs
+.svelte-kit
+build
+.vercel
+.netlify
+.wrangler
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.idea
+
+# Temporary files and folders
+temp-*
+*.log
+
+# Archive folder (development files, specs, analysis results)
+archive/
+
+# Large files (>100MB for GitHub)
+static/*.sf2
