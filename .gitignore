@@ -37,3 +37,6 @@ archive/
 
 # Large files (>100MB for GitHub)
 static/*.sf2
+
+# Upload scripts (contains sensitive info)
+upload-sf2.js
