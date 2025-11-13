@@ -13,7 +13,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## プロジェクト概要
 
-**ChordLens** は、88鍵盤（A0～C8）のピアノ鍵盤を表示し、リアルタイムでコード検出を行うSvelteKitアプリケーションです。MIDI入力に対応しており、演奏したコードを即座に分析・表示します。音楽理論に基づいた正確なコード検出と、複数候補の表示機能を備えています。
+**ChordSight** は、88鍵盤（A0～C8）のピアノ鍵盤を表示し、リアルタイムでコード検出を行うSvelteKitアプリケーションです。MIDI入力に対応しており、演奏したコードを即座に分析・表示します。音楽理論に基づいた正確なコード検出と、複数候補の表示機能を備えています。
 
 **技術スタック:**
 - SvelteKit 2.x + TypeScript

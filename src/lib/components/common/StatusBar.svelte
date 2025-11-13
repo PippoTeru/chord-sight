@@ -5,7 +5,7 @@
 <div class="status-bar" class:dark={settingsStore.isDarkMode} role="status">
 	<div class="status-content">
 		<span class="status-item">
-			🎹 Piano Training
+			🎹 ChordSight
 		</span>
 	</div>
 </div>
