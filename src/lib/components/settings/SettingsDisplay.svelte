@@ -73,6 +73,21 @@
 			Sustain Pedal Indicator
 		</label>
 	</div>
+
+	<!-- ハイライト色 -->
+	<div class="setting-item">
+		<label for="highlight-color">Highlight Color</label>
+		<div class="color-picker-wrapper">
+			<input
+				id="highlight-color"
+				type="color"
+				value={settingsStore.highlightColor}
+				oninput={(e) => settingsStore.setHighlightColor(e.currentTarget.value)}
+				tabindex={isOpen ? 0 : -1}
+			/>
+			<span class="color-value">{settingsStore.highlightColor}</span>
+		</div>
+	</div>
 </section>
 
 <style>
@@ -142,5 +157,50 @@
 	input[type='checkbox']:focus-visible {
 		outline: 2px solid #4caf50;
 		outline-offset: 2px;
+	}
+
+	.color-picker-wrapper {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+	}
+
+	input[type='color'] {
+		width: 60px;
+		height: 40px;
+		border: 2px solid #ddd;
+		border-radius: 6px;
+		cursor: pointer;
+		padding: 0;
+		background: none;
+	}
+
+	section.dark input[type='color'] {
+		border-color: #555;
+	}
+
+	input[type='color']:focus {
+		outline: none;
+		border-color: #4caf50;
+	}
+
+	input[type='color']::-webkit-color-swatch-wrapper {
+		padding: 4px;
+	}
+
+	input[type='color']::-webkit-color-swatch {
+		border: none;
+		border-radius: 4px;
+	}
+
+	.color-value {
+		font-size: 0.9rem;
+		font-family: monospace;
+		color: #666;
+		font-weight: 500;
+	}
+
+	section.dark .color-value {
+		color: #999;
 	}
 </style>

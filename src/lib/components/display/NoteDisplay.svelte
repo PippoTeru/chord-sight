@@ -92,6 +92,13 @@
 		font-size: 0.9em;
 	}
 
+	.note-names :global(.sharp) {
+		margin-left: -0.25em;
+		margin-right: -0.25em;
+		display: inline-block;
+		font-size: 0.9em;
+	}
+
 	.note-display.dark .note-names {
 		color: #999;
 	}

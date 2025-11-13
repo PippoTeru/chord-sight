@@ -47,9 +47,9 @@ export function formatNoteNamesAsText(noteNames: string[]): string {
 }
 
 /**
- * ♭記号をspan要素で囲んでスペーシング調整
+ * ♭と♯記号をspan要素で囲んでスペーシング調整
  *
- * フラット記号の前後にわずかなマージンを追加して可読性を向上。
+ * 臨時記号の前後にわずかなマージンを追加して可読性を向上。
  *
  * @param noteNamesText - 空白区切りの音名テキスト
  * @returns HTML形式のフォーマット済みテキスト
@@ -57,9 +57,14 @@ export function formatNoteNamesAsText(noteNames: string[]): string {
  * @example
  * formatNoteNamesAsHTML('D♭4 G♭4')
  * // => 'D<span class="flat">♭</span>4 G<span class="flat">♭</span>4'
+ *
+ * formatNoteNamesAsHTML('C♯4 F♯4')
+ * // => 'C<span class="sharp">♯</span>4 F<span class="sharp">♯</span>4'
  */
 export function formatNoteNamesAsHTML(noteNamesText: string): string {
-	return noteNamesText.replace(/♭/g, '<span class="flat">♭</span>');
+	return noteNamesText
+		.replace(/♭/g, '<span class="flat">♭</span>')
+		.replace(/♯/g, '<span class="sharp">♯</span>');
 }
 
 /**

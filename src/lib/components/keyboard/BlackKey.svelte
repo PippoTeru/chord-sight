@@ -32,9 +32,9 @@
 	);
 </script>
 
-<g class="black-key" class:active={isActive}>
+<g class="black-key" class:active={isActive} style="--highlight-color: {settingsStore.highlightColor}">
 	<!-- 黒鍵本体 -->
-	<path d={path} class="key-body" class:active-fill={isActive && settingsStore.keyboardDisplay !== 'off'} />
+	<path d={path} class="key-body" class:active-fill={isActive && settingsStore.visualFeedbackEnabled} />
 
 	<!-- ストローク（輪郭線） -->
 	<path d={path} class="key-stroke" />
@@ -47,7 +47,7 @@
 	}
 
 	.key-body.active-fill {
-		fill: #888888;
+		fill: var(--highlight-color, #888888);
 	}
 
 	.key-stroke {

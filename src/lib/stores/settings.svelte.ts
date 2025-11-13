@@ -25,6 +25,7 @@ interface SettingsData {
 	sustainIndicatorEnabled: boolean;
 	keyboardDisplayMode: KeyboardDisplayMode;
 	themeMode: ThemeMode;
+	highlightColor: string;
 
 	// コード設定
 	accidentalNotation: AccidentalNotation;
@@ -42,6 +43,7 @@ class Settings {
 	sustainIndicatorEnabled = $state(true);
 	keyboardDisplayMode = $state<KeyboardDisplayMode>('physical');
 	themeMode = $state<ThemeMode>('system');
+	highlightColor = $state('#888888');
 	accidentalNotation = $state<AccidentalNotation>('sharp');
 
 	// ディグリー表記設定
@@ -81,6 +83,7 @@ class Settings {
 				if (data.keyboardDisplayMode !== undefined)
 					this.keyboardDisplayMode = data.keyboardDisplayMode;
 				if (data.themeMode !== undefined) this.themeMode = data.themeMode;
+				if (data.highlightColor !== undefined) this.highlightColor = data.highlightColor;
 				if (data.accidentalNotation !== undefined)
 					this.accidentalNotation = data.accidentalNotation;
 				if (data.selectedTonic !== undefined) this.selectedTonic = data.selectedTonic;
@@ -107,6 +110,7 @@ class Settings {
 			sustainIndicatorEnabled: this.sustainIndicatorEnabled,
 			keyboardDisplayMode: this.keyboardDisplayMode,
 			themeMode: this.themeMode,
+			highlightColor: this.highlightColor,
 			accidentalNotation: this.accidentalNotation,
 			selectedTonic: this.selectedTonic,
 			selectedKeyMode: this.selectedKeyMode,
@@ -181,6 +185,12 @@ class Settings {
 		this.saveToLocalStorage();
 	}
 
+	// ハイライト色設定
+	setHighlightColor(color: string) {
+		this.highlightColor = color;
+		this.saveToLocalStorage();
+	}
+
 	// 設定リセット
 	resetSettings() {
 		this.selectedMidiDeviceId = null;
@@ -188,6 +198,7 @@ class Settings {
 		this.sustainIndicatorEnabled = true;
 		this.keyboardDisplayMode = 'physical';
 		this.themeMode = 'system';
+		this.highlightColor = '#888888';
 		this.accidentalNotation = 'sharp';
 		this.selectedTonic = null;
 		this.selectedKeyMode = 'major';
