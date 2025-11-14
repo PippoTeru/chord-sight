@@ -95,8 +95,9 @@
  * Z-index階層
  * ======================================== */
 :root {
-	--z-overlay: 1000;
-	--z-panel: 1001;
-	--z-settings-button: 1002;
-	--z-notification: 2000;
+	--z-header: 100; /* ヘッダー */
+	--z-chord-panel: 10; /* コード表記パネル */
+	--z-modal-backdrop: 1400; /* モーダル背景 */
+	--z-modal: 1500; /* モーダルダイアログ */
+	--z-notification: 2000; /* 通知トースト */
 }

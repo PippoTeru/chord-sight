@@ -22,10 +22,26 @@
 	});
 
 	/**
+	 * トランスポーズを適用したMIDI番号のSet
+	 */
+	let transposedMidiNumbers = $derived.by(() => {
+		// Key Highlight Modeがtransposedの場合、トランスポーズを適用
+		if (settingsStore.keyHighlightMode === 'transposed') {
+			const transposed = new Set<number>();
+			for (const midiNumber of midiStore.activeKeys) {
+				transposed.add(midiNumber + settingsStore.transpose);
+			}
+			return transposed;
+		}
+		// originalの場合はそのまま
+		return midiStore.activeKeys;
+	});
+
+	/**
 	 * コード判定と表示用フォーマット（全候補を取得）
 	 */
 	let chordCandidates = $derived(
-		detectChord(midiStore.activeKeys, {
+		detectChord(transposedMidiNumbers, {
 			accidentalNotation: settingsStore.accidentalNotation,
 			returnAll: true
 		})
@@ -35,7 +51,7 @@
 	 * コード判定（通常形式、ディグリー変換用）
 	 */
 	let chordCandidatesRaw = $derived(
-		detectChord(midiStore.activeKeys, {
+		detectChord(transposedMidiNumbers, {
 			accidentalNotation: settingsStore.accidentalNotation,
 			returnAll: true
 		})

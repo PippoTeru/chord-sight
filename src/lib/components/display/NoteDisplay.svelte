@@ -15,10 +15,26 @@
 	});
 
 	/**
+	 * トランスポーズを適用したMIDI番号のSet
+	 */
+	let transposedMidiNumbers = $derived.by(() => {
+		// Key Highlight Modeがtransposedの場合、トランスポーズを適用
+		if (settingsStore.keyHighlightMode === 'transposed') {
+			const transposed = new Set<number>();
+			for (const midiNumber of midiStore.activeKeys) {
+				transposed.add(midiNumber + settingsStore.transpose);
+			}
+			return transposed;
+		}
+		// originalの場合はそのまま
+		return midiStore.activeKeys;
+	});
+
+	/**
 	 * アクティブな音名のリスト（ソート済み）
 	 */
 	let activeNoteNames = $derived(
-		formatActiveNoteNames(midiStore.activeKeys, settingsStore.accidentalNotation)
+		formatActiveNoteNames(transposedMidiNumbers, settingsStore.accidentalNotation)
 	);
 
 	/**

@@ -8,6 +8,7 @@ import {
 	eventBus,
 	EVENT_MIDI_DEVICE_SELECTED,
 	EVENT_VISUAL_FEEDBACK_DISABLED,
+	EVENT_KEYBOARD_DISPLAY_MODE_CHANGED,
 	EVENT_SETTINGS_STORAGE_ERROR
 } from '$lib/services';
 import type { TonicNote, KeyMode } from '$lib/types';
@@ -15,6 +16,7 @@ import type { TonicNote, KeyMode } from '$lib/types';
 export type ThemeMode = 'system' | 'light' | 'dark';
 export type AccidentalNotation = 'sharp' | 'flat';
 export type KeyboardDisplayMode = 'physical' | 'sustained';
+export type KeyHighlightMode = 'original' | 'transposed';
 
 interface SettingsData {
 	// MIDI設定
@@ -24,11 +26,13 @@ interface SettingsData {
 	visualFeedbackEnabled: boolean;
 	sustainIndicatorEnabled: boolean;
 	keyboardDisplayMode: KeyboardDisplayMode;
+	keyHighlightMode: KeyHighlightMode;
 	themeMode: ThemeMode;
 	highlightColor: string;
 
 	// コード設定
 	accidentalNotation: AccidentalNotation;
+	transpose: number; // -11 〜 +11 の範囲
 
 	// ディグリー表記設定
 	selectedTonic: TonicNote | null;
@@ -42,9 +46,11 @@ class Settings {
 	visualFeedbackEnabled = $state(true);
 	sustainIndicatorEnabled = $state(true);
 	keyboardDisplayMode = $state<KeyboardDisplayMode>('physical');
+	keyHighlightMode = $state<KeyHighlightMode>('original');
 	themeMode = $state<ThemeMode>('system');
 	highlightColor = $state('#888888');
 	accidentalNotation = $state<AccidentalNotation>('sharp');
+	transpose = $state(0); // デフォルトは0（トランスポーズなし）
 
 	// ディグリー表記設定
 	selectedTonic = $state<TonicNote | null>(null);
@@ -53,6 +59,8 @@ class Settings {
 
 	// UI状態
 	isSettingsOpen = $state(false);
+	isHelpOpen = $state(false);
+	isChordNotationPanelOpen = $state(true); // デフォルトで開いた状態
 
 	// 派生状態（$derived）
 	isDarkMode = $derived.by(() => {
@@ -82,10 +90,13 @@ class Settings {
 					this.sustainIndicatorEnabled = data.sustainIndicatorEnabled;
 				if (data.keyboardDisplayMode !== undefined)
 					this.keyboardDisplayMode = data.keyboardDisplayMode;
+				if (data.keyHighlightMode !== undefined)
+					this.keyHighlightMode = data.keyHighlightMode;
 				if (data.themeMode !== undefined) this.themeMode = data.themeMode;
 				if (data.highlightColor !== undefined) this.highlightColor = data.highlightColor;
 				if (data.accidentalNotation !== undefined)
 					this.accidentalNotation = data.accidentalNotation;
+				if (data.transpose !== undefined) this.transpose = data.transpose;
 				if (data.selectedTonic !== undefined) this.selectedTonic = data.selectedTonic;
 				if (data.selectedKeyMode !== undefined) this.selectedKeyMode = data.selectedKeyMode;
 				if (data.showDegreeNotation !== undefined)
@@ -109,9 +120,11 @@ class Settings {
 			visualFeedbackEnabled: this.visualFeedbackEnabled,
 			sustainIndicatorEnabled: this.sustainIndicatorEnabled,
 			keyboardDisplayMode: this.keyboardDisplayMode,
+			keyHighlightMode: this.keyHighlightMode,
 			themeMode: this.themeMode,
 			highlightColor: this.highlightColor,
 			accidentalNotation: this.accidentalNotation,
+			transpose: this.transpose,
 			selectedTonic: this.selectedTonic,
 			selectedKeyMode: this.selectedKeyMode,
 			showDegreeNotation: this.showDegreeNotation
@@ -130,6 +143,7 @@ class Settings {
 
 	// パネル開閉
 	openSettings() {
+		this.closeHelp(); // ヘルプが開いている場合は閉じる
 		this.isSettingsOpen = true;
 	}
 
@@ -139,6 +153,33 @@ class Settings {
 
 	toggleSettings() {
 		this.isSettingsOpen = !this.isSettingsOpen;
+	}
+
+	// ヘルプモーダル開閉
+	openHelp() {
+		this.closeSettings(); // 設定が開いている場合は閉じる
+		this.isHelpOpen = true;
+	}
+
+	closeHelp() {
+		this.isHelpOpen = false;
+	}
+
+	toggleHelp() {
+		this.isHelpOpen = !this.isHelpOpen;
+	}
+
+	// コード表記パネル開閉
+	openChordNotationPanel() {
+		this.isChordNotationPanelOpen = true;
+	}
+
+	closeChordNotationPanel() {
+		this.isChordNotationPanelOpen = false;
+	}
+
+	toggleChordNotationPanel() {
+		this.isChordNotationPanelOpen = !this.isChordNotationPanelOpen;
 	}
 
 	// MIDIデバイス選択
@@ -179,9 +220,25 @@ class Settings {
 		this.saveToLocalStorage();
 	}
 
+	// トランスポーズ設定
+	setTranspose(semitones: number) {
+		// -11 〜 +11 の範囲に制限
+		this.transpose = Math.max(-11, Math.min(11, semitones));
+		this.saveToLocalStorage();
+	}
+
 	// 鍵盤表示モード設定
 	setKeyboardDisplayMode(mode: KeyboardDisplayMode) {
 		this.keyboardDisplayMode = mode;
+		this.saveToLocalStorage();
+
+		// モード変更時はactiveKeysをクリア（イベントバス経由）
+		eventBus.emit(EVENT_KEYBOARD_DISPLAY_MODE_CHANGED);
+	}
+
+	// 鍵盤ハイライトモード設定
+	setKeyHighlightMode(mode: KeyHighlightMode) {
+		this.keyHighlightMode = mode;
 		this.saveToLocalStorage();
 	}
 
@@ -197,9 +254,11 @@ class Settings {
 		this.visualFeedbackEnabled = true;
 		this.sustainIndicatorEnabled = true;
 		this.keyboardDisplayMode = 'physical';
+		this.keyHighlightMode = 'original';
 		this.themeMode = 'system';
 		this.highlightColor = '#888888';
 		this.accidentalNotation = 'sharp';
+		this.transpose = 0;
 		this.selectedTonic = null;
 		this.selectedKeyMode = 'major';
 		this.showDegreeNotation = false;

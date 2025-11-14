@@ -32,7 +32,22 @@
 	 * 鍵盤がアクティブか判定
 	 */
 	function isKeyActive(midiNumber: number): boolean {
-		return settingsStore.visualFeedbackEnabled && midiStore.activeKeys.has(midiNumber);
+		if (!settingsStore.visualFeedbackEnabled) {
+			return false;
+		}
+
+		// トランスポーズモードの場合、逆変換して元の押された鍵盤を探す
+		if (settingsStore.keyHighlightMode === 'transposed') {
+			// midiNumberはこの鍵盤の番号
+			// activeKeysは実際に押された鍵盤の番号
+			// 実際に押された鍵盤 + transpose = 表示される鍵盤
+			// なので、midiNumber - transpose = 実際に押された鍵盤
+			const originalMidiNumber = midiNumber - settingsStore.transpose;
+			return midiStore.activeKeys.has(originalMidiNumber);
+		}
+
+		// オリジナルモードの場合、そのまま判定
+		return midiStore.activeKeys.has(midiNumber);
 	}
 </script>
 

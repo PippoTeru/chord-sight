@@ -108,17 +108,21 @@
 		}
 	}
 
-	// メニューをbodyに追加・削除
+	// メニューをbodyまたはdialog要素に追加・削除
 	$effect(() => {
 		if (isOpen && menuRef) {
-			// メニューをbodyに追加
-			document.body.appendChild(menuRef);
+			// 親がdialog要素内にあるかチェック
+			const parentDialog = dropdownRef?.closest('dialog');
+			const container = parentDialog || document.body;
+
+			// メニューをコンテナに追加
+			container.appendChild(menuRef);
 		}
 
 		return () => {
-			// クリーンアップ: メニューをbodyから削除
-			if (menuRef && menuRef.parentNode === document.body) {
-				document.body.removeChild(menuRef);
+			// クリーンアップ: メニューを削除
+			if (menuRef && menuRef.parentNode) {
+				menuRef.parentNode.removeChild(menuRef);
 			}
 		};
 	});
@@ -256,7 +260,7 @@
 		list-style: none;
 		margin: 0;
 		padding: 0;
-		z-index: 10000;
+		z-index: 99999;
 		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 	}
 

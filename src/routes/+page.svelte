@@ -1,14 +1,17 @@
 <script lang="ts">
 	import { VirtualKeyboard } from "$lib/components/keyboard";
-	import { Settings } from "$lib/components/settings";
+	import { SettingsModal, ChordNotationPanel } from "$lib/components/settings";
 	import { ChordDisplay, NoteDisplay } from "$lib/components/display";
-	import { StatusBar, Notification } from "$lib/components/common";
+	import { Header, StatusBar, HelpModal, Notification } from "$lib/components/common";
 	import { settingsStore } from "$lib/stores";
 </script>
 
 <main class="app-container">
 
-	<!-- 上部エリア（設定パネルとコード表示） -->
+	<!-- ヘッダー -->
+	<Header isDark={settingsStore.isDarkMode} />
+
+	<!-- 上部エリア（コード表示） -->
 	<div class="content-area" class:dark={settingsStore.isDarkMode}>
 		<!-- コード表示と音名表示 -->
 		<div class="display-area">
@@ -16,8 +19,8 @@
 			<NoteDisplay />
 		</div>
 
-		<!-- 設定パネル -->
-		<Settings />
+		<!-- コード表記パネル（右下） -->
+		<ChordNotationPanel isDark={settingsStore.isDarkMode} />
 	</div>
 
 	<!-- 鍵盤エリア -->
@@ -27,6 +30,12 @@
 
 	<!-- ステータスバー -->
 	<StatusBar />
+
+	<!-- 設定モーダル -->
+	<SettingsModal />
+
+	<!-- ヘルプモーダル -->
+	<HelpModal />
 
 	<!-- 通知トースト -->
 	<Notification />
@@ -48,6 +57,7 @@
 		position: relative;
 		background: var(--bg-primary);
 		color: var(--text-primary);
+		padding-top: 60px; /* ヘッダーの高さ分 */
 		transition:
 			background-color var(--transition-normal),
 			color var(--transition-normal);

@@ -9,6 +9,7 @@ export {
 	eventBus,
 	EVENT_MIDI_DEVICE_SELECTED,
 	EVENT_VISUAL_FEEDBACK_DISABLED,
+	EVENT_KEYBOARD_DISPLAY_MODE_CHANGED,
 	EVENT_SETTINGS_STORAGE_ERROR,
 	type MidiDeviceSelectedEvent,
 	type SettingsStorageErrorEvent,

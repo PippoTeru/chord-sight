@@ -41,6 +41,7 @@ export class MIDIManager {
   private selectedDeviceId: string | null = null; // null = All Devices
   private activeNotes = new Set<number>(); // 現在ONになっているノート番号（バウンシング対策）
   private midiProvider: IMIDIProvider;
+  private isPaused = false; // MIDI入力一時停止フラグ
 
   /**
    * コンストラクタ
@@ -125,6 +126,11 @@ export class MIDIManager {
    * MIDIメッセージ処理
    */
   private handleMIDIMessage(event: MIDIMessageEvent): void {
+    // 一時停止中は処理しない
+    if (this.isPaused) {
+      return;
+    }
+
     // デバイスフィルタリング
     if (this.selectedDeviceId !== null && event.target) {
       const target = event.target as MIDIInput;
@@ -352,6 +358,20 @@ export class MIDIManager {
    */
   selectDevice(deviceId: string | null): void {
     this.selectedDeviceId = deviceId;
+  }
+
+  /**
+   * MIDI入力を一時停止
+   */
+  pause(): void {
+    this.isPaused = true;
+  }
+
+  /**
+   * MIDI入力を再開
+   */
+  resume(): void {
+    this.isPaused = false;
   }
 
   /**

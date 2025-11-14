@@ -2,7 +2,7 @@
  * MIDI Store - MIDI入力とコード検出用の状態管理（Svelte 5 runes版）
  */
 
-import { MIDIManager, eventBus, EVENT_MIDI_DEVICE_SELECTED, EVENT_VISUAL_FEEDBACK_DISABLED } from '$lib/services';
+import { MIDIManager, eventBus, EVENT_MIDI_DEVICE_SELECTED, EVENT_VISUAL_FEEDBACK_DISABLED, EVENT_KEYBOARD_DISPLAY_MODE_CHANGED } from '$lib/services';
 import { MIDIControlChange, type MIDIEvent } from '$lib/types';
 import { settingsStore } from './settings.svelte';
 import { SUSTAIN_PEDAL } from '$lib/constants';
@@ -158,6 +158,7 @@ class MIDIStore {
 	 * イベントバスリスナーのセットアップ
 	 * - MIDIデバイス選択イベント
 	 * - 視覚的フィードバック無効化イベント
+	 * - 鍵盤表示モード変更イベント
 	 */
 	private setupEventListeners() {
 		// MIDIデバイス選択イベント
@@ -171,6 +172,14 @@ class MIDIStore {
 		eventBus.on(EVENT_VISUAL_FEEDBACK_DISABLED, () => {
 			this.activeKeys.clear();
 			this.activeKeys = new Set(this.activeKeys);
+		});
+
+		// 鍵盤表示モード変更イベント
+		eventBus.on(EVENT_KEYBOARD_DISPLAY_MODE_CHANGED, () => {
+			// モード変更時はactiveKeysとsustainedKeysをクリア
+			this.activeKeys.clear();
+			this.activeKeys = new Set(this.activeKeys);
+			this.sustainedKeys.clear();
 		});
 	}
 

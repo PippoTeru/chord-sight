@@ -8,6 +8,7 @@
 // イベント名の定数（タイポ防止）
 export const EVENT_MIDI_DEVICE_SELECTED = 'midi:device:selected' as const;
 export const EVENT_VISUAL_FEEDBACK_DISABLED = 'settings:visual:feedback:disabled' as const;
+export const EVENT_KEYBOARD_DISPLAY_MODE_CHANGED = 'settings:keyboard:display:mode:changed' as const;
 export const EVENT_SETTINGS_STORAGE_ERROR = 'settings:storage:error' as const;
 
 // イベントデータの型定義
@@ -24,6 +25,7 @@ export interface SettingsStorageErrorEvent {
 export interface EventPayloadMap {
 	[EVENT_MIDI_DEVICE_SELECTED]: MidiDeviceSelectedEvent;
 	[EVENT_VISUAL_FEEDBACK_DISABLED]: void;
+	[EVENT_KEYBOARD_DISPLAY_MODE_CHANGED]: void;
 	[EVENT_SETTINGS_STORAGE_ERROR]: SettingsStorageErrorEvent;
 }
 

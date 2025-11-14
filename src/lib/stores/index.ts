@@ -12,7 +12,8 @@ export {
 	settingsStore,
 	type ThemeMode,
 	type AccidentalNotation,
-	type KeyboardDisplayMode
+	type KeyboardDisplayMode,
+	type KeyHighlightMode
 } from './settings.svelte';
 
 // Notification Store
